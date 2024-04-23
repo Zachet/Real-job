@@ -18,3 +18,5 @@ function nthPrime(n) {
 }
 
 console.log(nthPrime(10)); // Output: 29
+
+
