@@ -1,0 +1,108 @@
+using System;
+
+class Program
+{
+    static char[,] board = new char[3, 3];
+    static bool player1Turn = true;
+
+    static void Main(string[] args)
+    {
+        InitializeBoard();
+        PrintBoard();
+
+        while (!CheckForWinner() && !IsBoardFull())
+        {
+            Console.WriteLine((player1Turn ? "Player 1" : "Player 2") + ", enter your move (row col):");
+            string[] input = Console.ReadLine().Split(' ');
+            int row = int.Parse(input[0]);
+            int col = int.Parse(input[1]);
+
+            if (IsValidMove(row, col))
+            {
+                char symbol = player1Turn ? 'X' : 'O';
+                board[row, col] = symbol;
+                PrintBoard();
+                player1Turn = !player1Turn;
+            }
+            else
+            {
+                Console.WriteLine("Invalid move. Try again.");
+            }
+        }
+
+        if (CheckForWinner())
+        {
+            Console.WriteLine((player1Turn ? "Player 2" : "Player 1") + " wins!");
+        }
+        else
+        {
+            Console.WriteLine("It's a draw!");
+        }
+    }
+
+    static void InitializeBoard()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                board[i, j] = '-';
+            }
+        }
+    }
+
+    static void PrintBoard()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                Console.Write(board[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+
+    static bool IsValidMove(int row, int col)
+    {
+        return row >= 0 && row < 3 && col >= 0 && col < 3 && board[row, col] == '-';
+    }
+
+    static bool CheckForWinner()
+    {
+        // Check rows
+        for (int i = 0; i < 3; i++)
+        {
+            if (board[i, 0] != '-' && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
+                return true;
+        }
+
+        // Check columns
+        for (int j = 0; j < 3; j++)
+        {
+            if (board[0, j] != '-' && board[0, j] == board[1, j] && board[1, j] == board[2, j])
+                return true;
+        }
+
+        // Check diagonals
+        if (board[0, 0] != '-' && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
+            return true;
+        if (board[0, 2] != '-' && board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
+            return true;
+
+        return false;
+    }
+
+    static bool IsBoardFull()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (board[i, j] == '-')
+                    return false;
+            }
+        }
+        return true;
+    }
+}
